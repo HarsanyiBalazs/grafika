@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1679828465 source:c:\users\glyta\desktop\grafika\feladat2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+
