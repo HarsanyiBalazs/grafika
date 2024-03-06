@@ -3,6 +3,13 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+typedef struct Line{
+    int startx;
+    int starty;
+    int endx;
+    int endy;
+} line;
+
 /**
  * SDL2 example
  */
@@ -13,7 +20,7 @@ int main(int argc, char* argv[])
   bool need_run;
   SDL_Event event;
   SDL_Renderer* renderer;
-  int i;
+  
 
   error_code = SDL_Init(SDL_INIT_EVERYTHING);
   if (error_code != 0) {
@@ -28,8 +35,13 @@ int main(int argc, char* argv[])
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-
+  int max=3;
+  int i,j;
+  i=0;
+  j=0;
   int x,y;
+  line lines[max];
+
   need_run = true;
   while (need_run) {
     while (SDL_PollEvent(&event)) {
@@ -42,7 +54,7 @@ int main(int argc, char* argv[])
 
       
       SDL_SetRenderDrawColor(renderer, 255, 128, 0, SDL_ALPHA_OPAQUE);
-      SDL_RenderDrawLine(renderer, 0, 0, x, y);
+      //SDL_RenderDrawLine(renderer, 0, 0, x, y);
       
 
       SDL_RenderPresent(renderer);
@@ -57,8 +69,29 @@ int main(int argc, char* argv[])
         need_run = false;
         break;
       case SDL_MOUSEBUTTONDOWN:
-        SDL_GetMouseState(&x,&y);
-        printf("%d %d\n",x,y);
+        if(i<max)
+        {
+          if(j % 2 ==0)
+          {
+            SDL_GetMouseState(&lines[i].startx,&lines[i].starty);
+            printf("%d %d\n",lines[i].startx,lines[i].starty);
+            j++;
+          }else if(j % 2 ==1)
+          {
+            SDL_GetMouseState(&lines[i].endx,&lines[i].endy);
+            printf("%d %d\n",lines[i].endx,lines[i].endy);
+            SDL_RenderDrawLine(renderer, lines[i].startx , lines[i].starty, lines[i].endx,lines[i].endy);
+            j++;
+            i++;
+          }
+        }
+        else
+        {
+          i=0;
+          j=0;
+          SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+          SDL_RenderClear(renderer);
+        }
         break;
       }
     }
